@@ -22,24 +22,19 @@
       <v-row>
         <v-col cols="2">
           <div>
-            <v-btn @click="add">
+            <v-btn @click="add" prepend-icon="mdi-plus">
             Add To Do List
             </v-btn>
           </div>
         </v-col>
-        <v-col cols="1">
-          <div>
-            <v-btn @click="de">
-            DELETE
-            </v-btn>
-          </div>
+        <v-col cols="2">
         </v-col>
       </v-row>
       <v-row>
         
       </v-row>
       <div>
-         <v-table theme="dark">
+         <v-table>
     <thead>
       <tr>
         <th class="text-left">
@@ -51,6 +46,9 @@
         <th class="text-left">
           DURATION
         </th>
+        <th class="text-left">
+          REMARK
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -61,6 +59,9 @@
         <td>{{ item.id }}</td>
         <td>{{ item.todo }}</td>
         <td>{{ item.duration }} hr(s)</td>
+        <td v-if="item.duration > 0.75 ">Lazy</td>
+        <td v-else>Active</td>
+        <td><v-btn @click="removeItem(item)" prepend-icon="mdi-delete-variant">REMOVE</v-btn></td>
       </tr>
     </tbody>
   </v-table>
@@ -69,6 +70,7 @@
 </template>
 
 <script>
+
 
 export default {
   name: 'HelloWorld',
@@ -97,19 +99,36 @@ export default {
   }),
 
   methods:{
+    generateId(){
+      return this.todolist[this.todolist.length-1].id+1
+    },
     add(){
-      this.todolist.push({id:this.todolist.length+1, todo:this.todo, duration:this.duration}),
+      this.todolist.push({id:this.generateId(), todo:this.todo, duration:this.duration}),
       this.todo="",
       this.duration=""
     },
     changeFlag(){
       this.flag=!this.flag
     },
-    de(){
-      this.todolist.pop()
+    removeItem(item){
+      this.todolist=this.todolist.filter(todo => todo.todo != item.todo)
     },
-    update(){
-    }
+  async remove(){
+   console.log("one")
+      await new Promise(resolve =>
+     setTimeout(()=>{
+      console.log("two"); resolve();
+     },5000)
+     )      
+      console.log("three")
+  }
+  },
+ async created(){
+      await new Promise(resolve =>
+     setTimeout(()=>{this.title="This is my first vue project !!!"; resolve();
+     },5000)
+     )      
+    
   }
 
 }
